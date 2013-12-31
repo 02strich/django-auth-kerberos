@@ -1,4 +1,4 @@
-*.log
-*.pot
 *.pyc
-local_settings.py
+build/
+dist/
+django_auth_kerberos.egg-info/
