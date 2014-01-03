@@ -1,9 +1,12 @@
 import kerberos
+import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
+
+logger = logging.getLogger(__name__)
 
 class KrbBackend(ModelBackend):
     """
@@ -24,10 +27,11 @@ class KrbBackend(ModelBackend):
             UserModel().set_password(password)
 
     def check_password(self, user, password):
-
+        """The actual password checking logic. Separated from the authenticate code from Django for easier updating"""
         try:
             kerberos.checkPassword(username, password, settings.KRB5_SERVICE, settings.KRB5_REALM)
-
             return True
         except kerberos.BasicAuthError:
+            if getattr(settings, "KRB5_DEBUG", False):
+                logger.exception("Failure during authentication")
             return False
