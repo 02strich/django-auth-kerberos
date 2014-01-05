@@ -30,3 +30,10 @@ Make sure following settings are configured in `settings.py`:
     AUTHENTICATION_BACKENDS = (
         'django_auth_kerberos.backends.KrbBackend',
     )
+
+Tests
+-----
+
+The module contains a positive and a negative authentication test. 
+The positive test uses the `KRB5_TEST_USER` and `KRB5_TEST_PASSWORD`
+settings. It is recommended to not run them as part of a CI test run.
