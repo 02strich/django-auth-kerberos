@@ -23,7 +23,8 @@ class KrbBackend(ModelBackend):
             
         UserModel = get_user_model()
         user, created = UserModel.objects.get_or_create(**{
-            UserModel.USERNAME_FIELD: username
+            UserModel.USERNAME_FIELD+"__iexact": username,
+            defaults: { UserModel.USERNAME_FIELD: username }
         })
         return user
 
