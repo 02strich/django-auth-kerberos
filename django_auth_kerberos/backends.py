@@ -17,19 +17,20 @@ class KrbBackend(ModelBackend):
         UserModel = get_user_model()
         if username is None:
             username = kwargs.get(UserModel.USERNAME_FIELD)
-        try:
-            user = UserModel._default_manager.get_by_natural_key(username)
-            if self.check_password(user, password):
-                return user
-        except UserModel.DoesNotExist:
-            # Run the default password hasher once to reduce the timing
-            # difference between an existing and a non-existing user (#20760).
-            UserModel().set_password(password)
 
-    def check_password(self, user, password):
+        if not self.check_password(username, password):
+            return None
+            
+        UserModel = get_user_model()
+        user, created = UserModel.objects.get_or_create(**{
+            UserModel.USERNAME_FIELD: username
+        })
+        return user
+
+    def check_password(self, username, password):
         """The actual password checking logic. Separated from the authenticate code from Django for easier updating"""
         try:
-            kerberos.checkPassword(username, password, settings.KRB5_SERVICE, settings.KRB5_REALM)
+            kerberos.checkPassword(username.lower(), password, settings.KRB5_SERVICE, settings.KRB5_REALM)
             return True
         except kerberos.BasicAuthError:
             if getattr(settings, "KRB5_DEBUG", False):
