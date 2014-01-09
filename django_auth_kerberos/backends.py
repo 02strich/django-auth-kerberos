@@ -20,18 +20,35 @@ class KrbBackend(ModelBackend):
 
         if not self.check_password(username, password):
             return None
-            
+
         UserModel = get_user_model()
-        user, created = UserModel.objects.get_or_create(**{
-            UserModel.USERNAME_FIELD+"__iexact": username,
-            "defaults": { UserModel.USERNAME_FIELD: username }
-        })
-        return user
+        if getattr(settings, "KRB5_CREATE_USER", True):
+            if getattr(settings, "KRB5_USERNAME_MATCH_IEXACT", True):
+                user, created = UserModel.objects.get_or_create(**{
+                    UserModel.USERNAME_FIELD+"__iexact": username,
+                    "defaults": { UserModel.USERNAME_FIELD: username }
+                })
+                return user
+            else:
+                user, created = UserModel.objects.get_or_create(**{
+                    UserModel.USERNAME_FIELD: username,
+                    "defaults": { UserModel.USERNAME_FIELD: username }
+                })
+                return user
+        else:
+            try:
+                if getattr(settings, "KRB5_USERNAME_MATCH_IEXACT", True):
+                     return UserModel.objects.get(**{UserModel.USERNAME_FIELD+"__iexact": username})
+                else:
+                    return UserModel._default_manager.get_by_natural_key(username)
+            except UserModel.DoesNotExist:
+                return None
+        return None
 
     def check_password(self, username, password):
         """The actual password checking logic. Separated from the authenticate code from Django for easier updating"""
         try:
-            kerberos.checkPassword(username.lower(), password, settings.KRB5_SERVICE, settings.KRB5_REALM)
+            kerberos.checkPassword(username.lower(), password, getattr(settings, "KRB5_SERVICE", ""), settings.KRB5_REALM)
             return True
         except kerberos.BasicAuthError:
             if getattr(settings, "KRB5_DEBUG", False):
