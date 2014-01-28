@@ -54,3 +54,8 @@ class KrbBackend(ModelBackend):
             if getattr(settings, "KRB5_DEBUG", False):
                 logger.exception("Failure during authentication")
             return False
+        except:
+            if getattr(settings, "KRB5_DEBUG", False):
+                logger.exception("Failure during authentication")
+            # for all other execptions also deny access
+            return False

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-auth-kerberos",
-    version="1.2",
+    version="1.2.1",
     description="Kerberos authentication backend for Django",
     long_description="Kerberos authentication backend for Django",
     url="https://github.com/02strich/django-auth-kerberos",
