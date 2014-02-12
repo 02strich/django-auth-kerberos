@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-auth-kerberos",
-    version="1.2.1",
+    version="1.2.2",
     description="Kerberos authentication backend for Django",
     long_description="Kerberos authentication backend for Django",
     url="https://github.com/02strich/django-auth-kerberos",
@@ -26,6 +26,6 @@ setup(
     packages=find_packages(exclude='tests'),
     install_requires=[
         'Django>=1.6',
-        'kerberos==1.1.1',
+        'pykerberos>=1.1.3',
     ],
 )
