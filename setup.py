@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
+import sys
+
+if sys.platform.startswith("win"):
+    pykerberos = 'kerberos-sspi>=0.2'
+else:
+    pykerberos = 'pykerberos>=1.1.3'
+
 
 setup(
     name="django-auth-kerberos",
@@ -26,6 +33,6 @@ setup(
     packages=find_packages(exclude='tests'),
     install_requires=[
         'Django>=1.6',
-        'pykerberos>=1.1.3',
+        pykerberos,
     ],
 )
