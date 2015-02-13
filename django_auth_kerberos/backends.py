@@ -1,4 +1,7 @@
-import kerberos
+try:
+    import kerberos
+except ImportError:
+    import kerberos_sspi as kerberos
 import logging
 
 from django.conf import settings
