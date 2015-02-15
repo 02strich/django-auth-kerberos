@@ -10,7 +10,7 @@ else:
 
 setup(
     name="django-auth-kerberos",
-    version="1.2.2",
+    version="1.2.3",
     description="Kerberos authentication backend for Django",
     long_description="Kerberos authentication backend for Django",
     url="https://github.com/02strich/django-auth-kerberos",
