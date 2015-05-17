@@ -1,7 +1,11 @@
 try:
     import kerberos
+    SUPPORTS_VERIFY = True
 except ImportError:
     import kerberos_sspi as kerberos
+    # only pykerberos supports the verify parameter
+    SUPPORTS_VERIFY = False
+
 import logging
 
 from django.conf import settings
@@ -51,7 +55,10 @@ class KrbBackend(ModelBackend):
     def check_password(self, username, password):
         """The actual password checking logic. Separated from the authenticate code from Django for easier updating"""
         try:
-            kerberos.checkPassword(username.lower(), password, getattr(settings, "KRB5_SERVICE", ""), settings.KRB5_REALM)
+            if SUPPORTS_VERIFY:
+                kerberos.checkPassword(username.lower(), password, getattr(settings, "KRB5_SERVICE", ""), getattr(settings, "KRB5_REALM", ""), getatttr(settings, "KRB5_VERIFY_KDC", True))
+            else:
+                kerberos.checkPassword(username.lower(), password, getattr(settings, "KRB5_SERVICE", ""), getattr(settings, "KRB5_REALM", ""))
             return True
         except kerberos.BasicAuthError:
             if getattr(settings, "KRB5_DEBUG", False):
