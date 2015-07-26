@@ -56,7 +56,7 @@ class KrbBackend(ModelBackend):
         """The actual password checking logic. Separated from the authenticate code from Django for easier updating"""
         try:
             if SUPPORTS_VERIFY:
-                kerberos.checkPassword(username.lower(), password, getattr(settings, "KRB5_SERVICE", ""), getattr(settings, "KRB5_REALM", ""), getatttr(settings, "KRB5_VERIFY_KDC", True))
+                kerberos.checkPassword(username.lower(), password, getattr(settings, "KRB5_SERVICE", ""), getattr(settings, "KRB5_REALM", ""), getattr(settings, "KRB5_VERIFY_KDC", True))
             else:
                 kerberos.checkPassword(username.lower(), password, getattr(settings, "KRB5_SERVICE", ""), getattr(settings, "KRB5_REALM", ""))
             return True
