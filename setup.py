@@ -5,12 +5,12 @@ import sys
 if sys.platform.startswith("win"):
     pykerberos = 'kerberos-sspi>=0.2'
 else:
-    pykerberos = 'pykerberos>=1.1.6'
+    pykerberos = 'pykerberos>=1.1.10'
 
 
 setup(
     name="django-auth-kerberos",
-    version="1.2.4",
+    version="1.2.5",
     description="Kerberos authentication backend for Django",
     long_description="Kerberos authentication backend for Django",
     url="https://github.com/02strich/django-auth-kerberos",
