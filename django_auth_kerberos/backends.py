@@ -22,8 +22,6 @@ class KrbBackend(ModelBackend):
 
     def authenticate(self, username=None, password=None):
         UserModel = get_user_model()
-        if username is None:
-            username = kwargs.get(UserModel.USERNAME_FIELD)
 
         if not self.check_password(username, password):
             return None
