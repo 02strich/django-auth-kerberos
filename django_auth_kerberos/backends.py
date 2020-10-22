@@ -20,7 +20,7 @@ class KrbBackend(ModelBackend):
     Django Authentication backend using Kerberos for password checking.
     """
 
-    def authenticate(self, username=None, password=None):
+    def authenticate(self, request, username=None, password=None, **kwargs):
         UserModel = get_user_model()
 
         if not self.check_password(username, password):
